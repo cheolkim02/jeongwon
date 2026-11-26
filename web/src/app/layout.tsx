@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import BottomBar from "@/components/BottomBar";
 import "./globals.css";
 
 // Pretendard(OFL), 라이선스는 ./fonts/Pretendard-LICENSE.txt
@@ -19,10 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ko" className={pretendard.variable}>
-      <body className="bg-paper font-sans text-ink antialiased">
-        <div className="mx-auto max-w-phone pb-tabbar">{children}</div>
-        <BottomBar />
-      </body>
+      <body className="bg-paper font-sans break-keep text-ink antialiased">{children}</body>
     </html>
   );
 }

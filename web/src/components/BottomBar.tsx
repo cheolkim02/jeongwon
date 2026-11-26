@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Footnote } from "./ActionBar";
 import { CheckupIcon, ComplexIcon, GardenIcon, HomeIcon } from "./icons";
 
 const TABS = [
@@ -32,7 +33,7 @@ export default function BottomBar() {
           );
         })}
       </nav>
-      <p className="pb-2.5 text-center text-[10px] text-ink-soft">예시 데이터 · 정원 프로토타입</p>
+      <Footnote />
     </div>
   );
 }

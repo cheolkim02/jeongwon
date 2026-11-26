@@ -9,6 +9,7 @@
   --color-garden: #2f7d55; /* 정원(주색): 버튼, 진행 바, 식물 */
   --color-leaf: #8cc63f; /* 새잎 */
   --color-glow: #ffb547; /* 점검 빛 */
+  --color-glow-ink: #9a5b00; /* 점검 빛 위·옆 글자(흰 바탕 대비 4.5:1 이상) */
   --color-electric: #e8b931; /* 전기·수도·난방: 작은 아이콘과 칩에만 */
   --color-water: #3e8ed0;
   --color-heat: #e07a4f;
@@ -17,7 +18,7 @@
   --shadow-card: 0 1px 2px rgb(35 38 31 / 0.04), 0 6px 20px rgb(35 38 31 / 0.05);
 
   --spacing-gutter: 20px; /* 좌우 여백 */
-  --spacing-tabbar: 84px; /* 하단 탭바 + '예시 데이터' 높이 */
+  --spacing-tabbar: 84px; /* 하단 막대(탭바 또는 버튼 줄) + '예시 데이터' 높이 */
   --container-phone: 390px; /* 휴대폰 폭 */
 
   /* 점검 빛은 숨 쉬듯 약 2.5초. 가장 밝은 순간이 0%라 움직임 줄이기(스크린샷)에서는 가장 밝게 멈춘다 */

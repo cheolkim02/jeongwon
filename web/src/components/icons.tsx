@@ -1,5 +1,6 @@
 // 직접 그린 SVG 아이콘(외부 이미지·아이콘 세트를 쓰지 않는다)
 import type { SVGProps } from "react";
+import type { GardenStage } from "@/lib/calc";
 
 type P = SVGProps<SVGSVGElement>;
 
@@ -59,8 +60,23 @@ export const BellIcon = (p: P) => (
   </Line>
 );
 
-/** 묘목 모양(40×40 칸, 밑동이 (20, 31)). 아이콘과 미니어처 발코니가 같이 쓴다 */
-export const SaplingShape = () => (
+// 정원 단계별 식물(40×40 칸, 밑동이 (20, 31)). 아이콘·미니어처·정원 화면이 같이 쓴다
+const SeedShape = () => (
+  <>
+    <path d="M11 31c2-3.4 5.3-4.9 9-4.9s7 1.5 9 4.9z" fill="#c9a079" />
+    <ellipse cx="20" cy="25.6" rx="2.4" ry="3.2" fill="#8a6644" transform="rotate(-18 20 25.6)" />
+  </>
+);
+
+const SproutShape = () => (
+  <>
+    <path d="M20 31v-7" className="stroke-garden" strokeWidth={2} strokeLinecap="round" />
+    <path d="M20 25.5c-.6-3.1-2.9-5-6.4-5 .3 3.3 2.7 5.2 6.4 5z" className="fill-leaf" />
+    <path d="M20 24.5c.7-3.3 3.1-5.2 6.6-5.2-.4 3.5-2.9 5.4-6.6 5.2z" className="fill-leaf" />
+  </>
+);
+
+const SaplingShape = () => (
   <>
     <path d="M20 31V14" className="stroke-garden" strokeWidth={2} strokeLinecap="round" />
     <path d="M20 23c-.8-4.2-3.8-6.6-8.4-6.6.4 4.3 3.6 6.9 8.4 6.6z" className="fill-leaf" />
@@ -69,11 +85,54 @@ export const SaplingShape = () => (
   </>
 );
 
-/** 묘목(정원 한 줄 카드) */
-export const SaplingIcon = (p: P) => (
+// 나무: 잎을 3톤(왼쪽 위 밝게, 가운데, 오른쪽 아래 어둡게)으로
+const TreeShape = () => (
+  <>
+    <path d="M20 31v-10" stroke="#9a6b45" strokeWidth={2.6} strokeLinecap="round" />
+    <circle cx="20" cy="15.5" r="9" fill="#5e9f4b" />
+    <circle cx="24.2" cy="18.8" r="5.6" className="fill-garden" />
+    <circle cx="16.4" cy="12.6" r="5.4" className="fill-leaf" />
+  </>
+);
+
+const PLANT = { seed: SeedShape, sprout: SproutShape, sapling: SaplingShape, tree: TreeShape };
+
+export const PlantShape = ({ stage }: { stage: GardenStage }) => {
+  const Shape = PLANT[stage];
+  return <Shape />;
+};
+
+export const PlantIcon = ({ stage, ...p }: P & { stage: GardenStage }) => (
+  <svg viewBox="0 0 40 40" aria-hidden {...p}>
+    <PlantShape stage={stage} />
+  </svg>
+);
+
+export const BackIcon = (p: P) => (
+  <Line {...p}>
+    <path d="m14.5 5-7 7 7 7" />
+  </Line>
+);
+
+export const ChevronIcon = (p: P) => (
+  <Line {...p}>
+    <path d="m9.5 5 7 7-7 7" />
+  </Line>
+);
+
+/** 괜찮은 항목의 초록 체크 */
+export const CheckIcon = (p: P) => (
+  <svg viewBox="0 0 24 24" aria-hidden {...p}>
+    <circle cx="12" cy="12" r="11" className="fill-garden/12" />
+    <path d="m7.5 12.3 3 3 6-6.2" fill="none" className="stroke-garden" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+/** 지금 단계 식물 배지(정원 한 줄 카드) */
+export const PlantBadge = ({ stage, ...p }: P & { stage: GardenStage }) => (
   <svg viewBox="0 0 40 40" aria-hidden {...p}>
     <circle cx="20" cy="20" r="20" className="fill-leaf/15" />
-    <SaplingShape />
+    <PlantShape stage={stage} />
     <path d="M14 31h12" className="stroke-garden/50" strokeWidth={2} strokeLinecap="round" />
   </svg>
 );

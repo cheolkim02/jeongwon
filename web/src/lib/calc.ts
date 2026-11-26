@@ -37,21 +37,28 @@ export function gardenProgress(h: Household) {
   return { savedKwh, rate, goalKwh, stage, onTrack: rate >= h.goalRate, barFill: bar(rate), barGoal: bar(h.goalRate) };
 }
 
-/** 누수: 끝에서부터 임계치를 넘은 연속 일수, 그 기간 중앙값 유량, 이대로 한 달 흐를 때 손실액 */
+/** 누수: 끝에서부터 임계치를 넘은 연속 일수, 그 기간 중앙값 유량, 그 전의 평소 수준, 이대로 한 달 흐를 때 손실액 */
 export function leakCheck(h: Household) {
   const flows = h.leak.nightMinFlowLph;
   let days = 0;
   while (days < flows.length && flows[flows.length - 1 - days] > C.LEAK_THRESHOLD_LPH) days++;
   const flowLph = days ? median(flows.slice(-days)) : 0;
+  const before = flows.slice(0, flows.length - days);
+  const usualLph = before.length ? median(before) : 0;
   const monthlyM3 = (flowLph * 24 * daysInMonth(h.asOf)) / 1000;
   return {
     detected: days >= C.LEAK_MIN_DAYS,
     days,
     flowLph,
+    usualLph,
     hour: h.leak.minFlowHour,
     monthlyLossWon: monthlyM3 * C.WATER_WON_PER_M3,
   };
 }
+
+/** 기준일까지 최근 n일의 날짜(일). 오래된 날부터 */
+export const recentDays = ({ year, month, day }: Household["asOf"], n: number) =>
+  Array.from({ length: n }, (_, i) => new Date(year, month - 1, day - (n - 1 - i)).getDate());
 
 /** 미니어처에서 살펴볼 곳 개수 */
 export const checkupCount = (h: Household) => [leakCheck(h).detected].filter(Boolean).length;

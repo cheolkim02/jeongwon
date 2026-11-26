@@ -25,6 +25,9 @@ export const KWH_PER_PINE = PINE_CO2_KG_PER_YEAR / GRID_KG_CO2_PER_KWH;
 export const LEAK_THRESHOLD_LPH = 2;
 export const LEAK_MIN_DAYS = 3;
 
+// 서울시는 이 해부터 변기 누수로 더 나온 수도요금을 감면하지 않는다. TODO: 서울시 수도 조례·감면 기준 원문으로 출처 확인
+export const SEOUL_TOILET_LEAK_NO_RELIEF_SINCE = 2020;
+
 // 정원 단계: 절약량 ÷ 목표량이 이 값 미만이면 그 단계. 나무는 월말 달성 확정 때만.
 export const GARDEN_STAGE_BELOW = { seed: 0.3, sprout: 0.7 };
 

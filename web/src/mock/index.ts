@@ -11,7 +11,10 @@ export const household: Household = {
     minFlowHour: 3,
     roomId: "bath",
   },
-  pastMonths: [{ year: 2026, month: 10, baselineKwh: 300, usedKwh: 284.2, goalRate: 0.03 }],
+  pastMonths: [
+    { year: 2026, month: 9, baselineKwh: 280, usedKwh: 268.8, goalRate: 0.03 },
+    { year: 2026, month: 10, baselineKwh: 300, usedKwh: 284.2, goalRate: 0.03 },
+  ],
 };
 
 export { floorPlan84 } from "./floorplan";

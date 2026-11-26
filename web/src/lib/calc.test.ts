@@ -16,6 +16,7 @@ import {
   gardenProgress,
   leakCheck,
   monthResult,
+  recentDays,
 } from "./calc";
 
 describe("SCREENS.md 예시 데이터", () => {
@@ -47,11 +48,16 @@ describe("SCREENS.md 예시 데이터", () => {
     expect(l.monthlyLossWon).toBeCloseTo(5.796 * 1700, 6);
     expect(formatWon(l.monthlyLossWon)).toBe("1만 원");
     expect(l.hour).toBe(3);
+    expect(l.usualLph).toBeCloseTo(0.55, 6); // 그래프의 평소 수준(누수 전 8일 중앙값)
     expect(checkupCount(household)).toBe(1);
   });
 
+  it("내가 키운 나무: 9월·10월 달성", () => {
+    expect(household.pastMonths.filter((m) => monthResult(m).achieved).map((m) => m.month)).toEqual([9, 10]);
+  });
+
   it("10월 카드: '5.3% 달성', '소나무 1그루'", () => {
-    const m = monthResult(household.pastMonths[0]);
+    const m = monthResult(household.pastMonths.find((p) => p.month === 10)!);
     expect(m.savedKwh).toBeCloseTo(15.8, 6);
     expect(formatPercent(m.rate)).toBe("5.3%");
     expect(m.achieved).toBe(true);
@@ -99,6 +105,15 @@ describe("규칙", () => {
     expect(at(270.4 - 9.36 * 0.71).stage).toBe("sapling");
     expect(at(300).stage).toBe("seed");
     expect(at(300).barFill).toBe(0);
+  });
+
+  it("못 채운 달은 나무 목록에서 그냥 빠진다", () => {
+    expect(monthResult({ year: 2026, month: 8, baselineKwh: 300, usedKwh: 297, goalRate: 0.03 }).achieved).toBe(false);
+  });
+
+  it("그래프 날짜: 기준일까지 14일, 달이 바뀌어도 맞다", () => {
+    expect(recentDays(household.asOf, 14)).toEqual([13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26]);
+    expect(recentDays({ year: 2026, month: 12, day: 2 }, 3)).toEqual([30, 1, 2]);
   });
 
   it("누수가 없으면 살펴볼 곳 0", () => {

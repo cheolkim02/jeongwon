@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { BellIcon, SaplingIcon } from "@/components/icons";
+import GoalBar from "@/components/GoalBar";
+import { BellIcon, ChevronIcon, PlantBadge } from "@/components/icons";
 import Miniature from "@/components/Miniature";
 import {
   billForecast,
@@ -46,6 +47,7 @@ export default function Home() {
       <div className="relative -mx-gutter min-h-60 flex-1">
         <Miniature
           plan={floorPlan84}
+          stage={garden.stage}
           glowRoom={leak.detected ? h.leak.roomId : undefined}
           bubble={{ text: "새벽에도 물이 흘러요", href: "/checkup/leak" }}
           className="absolute inset-0 size-full"
@@ -79,32 +81,20 @@ export default function Home() {
       </section>
 
       <Link href="/garden" className="card flex items-center gap-3.5 px-4 py-3.5">
-        <SaplingIcon className="size-11 shrink-0" />
+        <PlantBadge stage={garden.stage} className="size-11 shrink-0" />
         <div className="min-w-0 flex-1">
           <p className="text-[15px] font-semibold tabular-nums">
             목표 {formatPercent(h.goalRate, 0)} · 지금 {formatPercent(garden.rate)} 아끼는 중
           </p>
-          <div
-            role="progressbar"
-            aria-label="이번 달 정원"
-            aria-valuenow={Math.round(garden.barFill * 100)}
-            aria-valuetext={`목표 ${formatPercent(h.goalRate, 0)}, 지금 ${formatPercent(garden.rate)}`}
-            className="relative mt-2.5 h-2 rounded-full bg-garden/10"
-          >
-            <div
-              className="h-full rounded-full bg-linear-to-r from-leaf to-garden"
-              style={{ width: `${garden.barFill * 100}%` }}
-            />
-            <span
-              aria-hidden
-              className="absolute -top-1 h-4 w-[3px] -translate-x-1/2 rounded-full bg-ink/70 ring-2 ring-card"
-              style={{ left: `${garden.barGoal * 100}%` }}
+          <div className="mt-2.5">
+            <GoalBar
+              fill={garden.barFill}
+              goal={garden.barGoal}
+              valueText={`목표 ${formatPercent(h.goalRate, 0)}, 지금 ${formatPercent(garden.rate)}`}
             />
           </div>
         </div>
-        <span aria-hidden className="text-xl text-ink-soft">
-          ›
-        </span>
+        <ChevronIcon className="size-5 text-ink-soft" />
       </Link>
     </main>
   );

@@ -1,7 +1,8 @@
 // 우리 집 미니어처: 평면 데이터를 아이소메트릭으로 투영해 그린다. 윤곽선 없이 면마다 3톤 음영.
-import { boxFaces, depthSort, iso, points, shade, type Box, type Pt } from "@/lib/iso";
+import type { GardenStage } from "@/lib/calc";
+import { PX_PER_M, boxFaces, depthSort, iso, points, shade, type Box, type Pt } from "@/lib/iso";
 import type { FloorPlan, FurnitureKind, Room, RoomId, Wall } from "@/types";
-import { SaplingShape } from "./icons";
+import { PlantShape } from "./icons";
 
 const WALL_H = 1; // 낮게 자른 벽(m)
 const WALL_T = 0.14;
@@ -75,13 +76,18 @@ const SPARKS = [
 
 interface Props {
   plan: FloorPlan;
+  /** 발코니 화분의 정원 단계 */
+  stage: GardenStage;
   /** 점검 빛을 켤 방 */
   glowRoom?: RoomId;
   bubble?: { text: string; href: string };
+  /** 확대: 평면의 한 점(m)을 가운데 두고 폭 w·높이 h(m)만큼만 보여 준다. 남는 쪽은 잘라 낸다 */
+  focus?: { x: number; y: number; z?: number; w: number; h: number };
+  label?: string;
   className?: string;
 }
 
-export default function Miniature({ plan, glowRoom, bubble, className }: Props) {
+export default function Miniature({ plan, stage, glowRoom, bubble, focus, label = "우리 집 미니어처", className }: Props) {
   const W = Math.max(...plan.rooms.map((r) => r.x + r.w));
   const D = Math.max(...plan.rooms.map((r) => r.y + r.d));
   const slab: Item = { x: -WALL_T / 2, y: -WALL_T / 2, z: -SLAB, w: W + WALL_T, d: D + WALL_T, h: SLAB, color: SLAB_COLOR };
@@ -101,12 +107,27 @@ export default function Miniature({ plan, glowRoom, bubble, className }: Props) 
   const ys = [...all.map((p) => p[1]), ...(anchor ? [anchor[1] - 44] : []), py - 60];
   const [x0, x1] = [Math.min(...xs) - 6, Math.max(...xs) + 6];
   const [y0, y1] = [Math.min(...ys) - 6, Math.max(...ys) + 10];
+  let viewBox = `${x0} ${y0} ${x1 - x0} ${y1 - y0}`;
+  if (focus) {
+    const [cx, cy] = iso(focus.x, focus.y, focus.z);
+    const [w, h] = [focus.w * PX_PER_M, focus.h * PX_PER_M];
+    viewBox = `${cx - w / 2} ${cy - h / 2} ${w} ${h}`;
+  }
 
   return (
-    <svg viewBox={`${x0} ${y0} ${x1 - x0} ${y1 - y0}`} className={className} role="group" aria-label="우리 집 미니어처">
+    <svg
+      viewBox={viewBox}
+      preserveAspectRatio={focus ? "xMidYMid slice" : undefined}
+      className={className}
+      role="group"
+      aria-label={label}
+    >
       <defs>
         <filter id="mini-soft" x="-20%" y="-20%" width="140%" height="140%">
           <feGaussianBlur stdDeviation="7" />
+        </filter>
+        <filter id="mini-mote" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="0.6" />
         </filter>
         <filter id="mini-glow" x="-80%" y="-80%" width="260%" height="260%">
           <feGaussianBlur stdDeviation="11" />
@@ -146,10 +167,10 @@ export default function Miniature({ plan, glowRoom, bubble, className }: Props) 
         />
       )}
 
-      {/* 발코니 묘목과 빛 입자. shortcut: 단계와 상관없이 묘목을 그린다, V2 정원 화면에서 단계별 그림을 만들 때 stage를 받는다 */}
+      {/* 발코니 화분의 식물(정원 단계)과 빛 입자 */}
       <g aria-hidden>
         <g transform={`translate(${px - 20 * 1.3} ${py - 31 * 1.3}) scale(1.3)`}>
-          <SaplingShape />
+          <PlantShape stage={stage} />
         </g>
         {SPARKS.map(([dx, dy, r, delay]) => (
           <circle
@@ -157,7 +178,9 @@ export default function Miniature({ plan, glowRoom, bubble, className }: Props) 
             cx={px + dx}
             cy={py + dy}
             r={r}
-            className="animate-twinkle fill-leaf/80 motion-reduce:animate-none"
+            fill="#d6ee93"
+            filter="url(#mini-mote)"
+            className="animate-twinkle motion-reduce:animate-none"
             style={{ animationDelay: `${delay}s` }}
           />
         ))}
