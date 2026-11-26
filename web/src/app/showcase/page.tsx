@@ -12,7 +12,7 @@ const SCREENS = [
 const PHONE = { w: 390, h: 844 };
 const SCALE = 0.82;
 
-// 모아 보기(1920×1080): 신청서용 한 장
+// 모아 보기(1920×1080): 화면을 모은 한 장
 export default function ShowcasePage() {
   return (
     <main className="mx-auto flex h-[1080px] w-[1920px] flex-col px-24 pt-14 pb-7">

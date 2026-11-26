@@ -10,7 +10,7 @@ const BASE = `http://localhost:${PORT}`;
 const OUT = fileURLToPath(new URL("../../docs/screenshots/", import.meta.url));
 const PHONE = { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3 };
 const SHOTS = [
-  // 모아 보기는 1920×1080 배치를 배율 2로(신청서에 넣었을 때 선명하게)
+  // 모아 보기는 1920×1080 배치를 배율 2로(문서에 넣었을 때 선명하게)
   ["00_showcase", "/showcase", { viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 2 }],
   ["01_home", "/", PHONE],
   ["02_checkup_leak", "/checkup/leak", PHONE],
