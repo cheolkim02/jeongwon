@@ -15,6 +15,7 @@ export const WATER_WON_PER_M3 = 1700;
 export const HEATING_WON_PER_MCAL = 110;
 
 // 30년생 소나무 1그루 연간 CO2 흡수량, kg. 출처: 국립산림과학원(2012)
+export const PINE_AGE_YEARS = 30;
 export const PINE_CO2_KG_PER_YEAR = 6.6;
 // 전력 배출계수, kgCO2/kWh. 출처: 2023년 국가 전력배출계수(2025.12 공표)
 export const GRID_KG_CO2_PER_KWH = 0.4173;
@@ -31,5 +32,12 @@ export const SEOUL_TOILET_LEAK_NO_RELIEF_SINCE = 2020;
 // 정원 단계: 절약량 ÷ 목표량이 이 값 미만이면 그 단계. 나무는 월말 달성 확정 때만.
 export const GARDEN_STAGE_BELOW = { seed: 0.3, sprout: 0.7 };
 
-// 정원 진행 바의 끝 = 고를 수 있는 가장 높은 목표(5%)
-export const GARDEN_BAR_MAX_RATE = 0.05;
+// 고를 수 있는 이번 달 목표(작년 같은 달 대비, 날씨 보정). 3%는 에너지캐시백 기본 기준, 5%는 탄소중립포인트 기준(SPEC_P0 FR-B1)
+export const GOAL_OPTIONS = [
+  { rate: 0.01, note: "가볍게" },
+  { rate: 0.03, note: "추천, 에너지캐시백 기준" },
+  { rate: 0.05, note: "도전, 탄소중립포인트 기준" },
+];
+
+// 정원 진행 바의 끝 = 고를 수 있는 가장 높은 목표
+export const GARDEN_BAR_MAX_RATE = Math.max(...GOAL_OPTIONS.map((o) => o.rate));

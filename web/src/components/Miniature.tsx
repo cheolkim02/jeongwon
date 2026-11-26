@@ -83,11 +83,22 @@ interface Props {
   bubble?: { text: string; href: string };
   /** 확대: 평면의 한 점(m)을 가운데 두고 폭 w·높이 h(m)만큼만 보여 준다. 남는 쪽은 잘라 낸다 */
   focus?: { x: number; y: number; z?: number; w: number; h: number };
+  /** 화분 식물 크기(기본 1.3). 정원 카드처럼 식물이 주인공일 때 키운다 */
+  plantScale?: number;
   label?: string;
   className?: string;
 }
 
-export default function Miniature({ plan, stage, glowRoom, bubble, focus, label = "우리 집 미니어처", className }: Props) {
+export default function Miniature({
+  plan,
+  stage,
+  glowRoom,
+  bubble,
+  focus,
+  plantScale: k = 1.3,
+  label = "우리 집 미니어처",
+  className,
+}: Props) {
   const W = Math.max(...plan.rooms.map((r) => r.x + r.w));
   const D = Math.max(...plan.rooms.map((r) => r.y + r.d));
   const slab: Item = { x: -WALL_T / 2, y: -WALL_T / 2, z: -SLAB, w: W + WALL_T, d: D + WALL_T, h: SLAB, color: SLAB_COLOR };
@@ -104,7 +115,7 @@ export default function Miniature({ plan, stage, glowRoom, bubble, focus, label 
   // 보이는 모든 꼭짓점 + 말풍선으로 viewBox를 정한다
   const all = [slab, ...items].flatMap((b) => Object.values(boxFaces(b)).flat());
   const xs = all.map((p) => p[0]);
-  const ys = [...all.map((p) => p[1]), ...(anchor ? [anchor[1] - 44] : []), py - 60];
+  const ys = [...all.map((p) => p[1]), ...(anchor ? [anchor[1] - 44] : []), py - 34 * k];
   const [x0, x1] = [Math.min(...xs) - 6, Math.max(...xs) + 6];
   const [y0, y1] = [Math.min(...ys) - 6, Math.max(...ys) + 10];
   let viewBox = `${x0} ${y0} ${x1 - x0} ${y1 - y0}`;
@@ -169,15 +180,15 @@ export default function Miniature({ plan, stage, glowRoom, bubble, focus, label 
 
       {/* 발코니 화분의 식물(정원 단계)과 빛 입자 */}
       <g aria-hidden>
-        <g transform={`translate(${px - 20 * 1.3} ${py - 31 * 1.3}) scale(1.3)`}>
+        <g transform={`translate(${px - 20 * k} ${py - 31 * k}) scale(${k})`}>
           <PlantShape stage={stage} />
         </g>
         {SPARKS.map(([dx, dy, r, delay]) => (
           <circle
             key={`${dx},${dy}`}
-            cx={px + dx}
-            cy={py + dy}
-            r={r}
+            cx={px + (dx * k) / 1.3}
+            cy={py + (dy * k) / 1.3}
+            r={(r * k) / 1.3}
             fill="#d6ee93"
             filter="url(#mini-mote)"
             className="animate-twinkle motion-reduce:animate-none"

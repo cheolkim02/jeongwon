@@ -84,11 +84,17 @@ export function billForecast(h: Household) {
   return { electricity, water, heating, total: electricity + water + heating };
 }
 
-/** 지난달 결과: 절약량, 절약률, 달성 여부, 소나무 환산 */
+/** 지난달 결과: 절약량, 절약률, 달성 여부, 소나무 환산, 아낀 전기요금(누진 반영) */
 export function monthResult(m: PastMonth) {
   const savedKwh = m.baselineKwh - m.usedKwh;
   const rate = savedKwh / m.baselineKwh;
-  return { savedKwh, rate, achieved: rate >= m.goalRate, pines: savedKwh / C.KWH_PER_PINE };
+  return {
+    savedKwh,
+    rate,
+    achieved: rate >= m.goalRate,
+    pines: savedKwh / C.KWH_PER_PINE,
+    savedWon: electricityBillWon(m.baselineKwh) - electricityBillWon(m.usedKwh),
+  };
 }
 
 /** 단지 정원 진행률 */

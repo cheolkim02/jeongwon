@@ -62,10 +62,14 @@ describe("SCREENS.md 예시 데이터", () => {
     expect(formatPercent(m.rate)).toBe("5.3%");
     expect(m.achieved).toBe(true);
     expect(formatPines(m.pines)).toBe("1");
+    expect(formatKwh(m.savedKwh)).toBe("16kWh"); // "약 16kWh = 소나무 1그루"
+    expect(formatWon(m.savedWon)).toBe("3천 원"); // 토글을 켜면 보이는 아낀 금액(2단계 214.6원 × 15.8kWh)
   });
 
-  it("단지: '25%'", () => {
+  it("단지: '25%', '1,700그루', '420그루'", () => {
     expect(formatPercent(complexProgress(complex), 0)).toBe("25%");
+    expect(formatPines(complex.goalPines)).toBe("1,700");
+    expect(formatPines(complex.currentPines)).toBe("420");
   });
 
   it("11월 예상 요금: 월말 예상 사용량 × 단가", () => {
