@@ -59,14 +59,21 @@ export const BellIcon = (p: P) => (
   </Line>
 );
 
-/** 묘목(정원 한 줄 카드) */
-export const SaplingIcon = (p: P) => (
-  <svg viewBox="0 0 40 40" aria-hidden {...p}>
-    <circle cx="20" cy="20" r="20" className="fill-leaf/15" />
+/** 묘목 모양(40×40 칸, 밑동이 (20, 31)). 아이콘과 미니어처 발코니가 같이 쓴다 */
+export const SaplingShape = () => (
+  <>
     <path d="M20 31V14" className="stroke-garden" strokeWidth={2} strokeLinecap="round" />
     <path d="M20 23c-.8-4.2-3.8-6.6-8.4-6.6.4 4.3 3.6 6.9 8.4 6.6z" className="fill-leaf" />
     <path d="M20 19.5c.9-4.4 4-6.9 8.6-6.9-.5 4.6-3.8 7.2-8.6 6.9z" className="fill-garden" />
     <path d="M20 15c-.7-2.8.3-5.4 2.9-7 1.1 2.7.1 5.4-2.9 7z" className="fill-leaf" />
+  </>
+);
+
+/** 묘목(정원 한 줄 카드) */
+export const SaplingIcon = (p: P) => (
+  <svg viewBox="0 0 40 40" aria-hidden {...p}>
+    <circle cx="20" cy="20" r="20" className="fill-leaf/15" />
+    <SaplingShape />
     <path d="M14 31h12" className="stroke-garden/50" strokeWidth={2} strokeLinecap="round" />
   </svg>
 );

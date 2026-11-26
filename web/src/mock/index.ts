@@ -9,9 +9,12 @@ export const household: Household = {
   leak: {
     nightMinFlowLph: [0.6, 0.4, 0.8, 0.5, 0.7, 0.3, 0.6, 0.5, 7.8, 8.2, 8.1, 7.9, 8.0, 8.3],
     minFlowHour: 3,
+    roomId: "bath",
   },
   pastMonths: [{ year: 2026, month: 10, baselineKwh: 300, usedKwh: 284.2, goalRate: 0.03 }],
 };
+
+export { floorPlan84 } from "./floorplan";
 
 export const complex: Complex = {
   households: 1024,

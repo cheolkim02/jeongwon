@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BellIcon, SaplingIcon } from "@/components/icons";
+import Miniature from "@/components/Miniature";
 import {
   billForecast,
   checkupCount,
@@ -7,15 +8,17 @@ import {
   formatPercent,
   formatWon,
   gardenProgress,
+  leakCheck,
 } from "@/lib/calc";
-import { household as h } from "@/mock";
+import { floorPlan84, household as h } from "@/mock";
 
-// ① 우리 집(홈). 미니어처 그림은 V1에서 그린다.
+// ① 우리 집(홈)
 export default function Home() {
   const count = checkupCount(h);
   const bill = billForecast(h);
   const elec = electricitySaving(h);
   const garden = gardenProgress(h);
+  const leak = leakCheck(h);
   const month = `${h.asOf.month}월`;
   const chips = [
     { label: "전기", won: bill.electricity, dot: "bg-electric" },
@@ -39,12 +42,15 @@ export default function Home() {
         </h1>
       </section>
 
-      {/* 미니어처 자리: 남는 높이를 모두 쓴다(스크롤 없이 한 화면) */}
-      <div
-        role="img"
-        aria-label="우리 집 미니어처"
-        className="min-h-60 flex-1 rounded-card border-2 border-dashed border-ink/10"
-      />
+      {/* 미니어처는 폭 가득, 남는 높이를 모두 쓴다(스크롤 없이 한 화면) */}
+      <div className="relative -mx-gutter min-h-60 flex-1">
+        <Miniature
+          plan={floorPlan84}
+          glowRoom={leak.detected ? h.leak.roomId : undefined}
+          bubble={{ text: "새벽에도 물이 흘러요", href: "/checkup/leak" }}
+          className="absolute inset-0 size-full"
+        />
+      </div>
 
       <section className="card px-5 py-4">
         <h2 className="text-sm font-semibold text-ink-soft">{month} 예상 요금</h2>

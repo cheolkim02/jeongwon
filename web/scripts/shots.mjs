@@ -43,7 +43,8 @@ try {
   await mkdir(OUT, { recursive: true });
   browser = await chromium.launch();
   for (const [name, path, opts] of SHOTS) {
-    const page = await browser.newPage(opts);
+    // 움직임 줄이기: 점검 빛이 가장 밝은 순간에 멈춘다
+    const page = await browser.newPage({ ...opts, reducedMotion: "reduce" });
     const res = await page.goto(BASE + path, { waitUntil: "networkidle" });
     if (res?.status() === 404) {
       console.log(`건너뜀  ${name}  (${path} 아직 없음)`);

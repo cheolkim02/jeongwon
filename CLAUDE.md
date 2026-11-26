@@ -11,11 +11,11 @@ SVC Seoul AI 해커톤(with 현대건설) 지정과제 3 출품용, 1인 개발.
 ## 구조
 - web/: Next.js(App Router) + TypeScript + Tailwind
   - web/src/types.ts: 화면이 읽는 데이터 형태. Phase 2 파이프라인 JSON도 이 형태를 따른다
-  - web/src/mock/: 예시 데이터(입력값만)
-  - web/src/lib/calc.ts: 화면 숫자를 만드는 계산 함수
+  - web/src/mock/: 예시 데이터(입력값만). floorplan.ts는 84㎡ 평면(방·벽·가구, m 단위)
+  - web/src/lib/calc.ts: 화면 숫자를 만드는 계산 함수. iso.ts는 아이소메트릭 투영·그리기 순서·음영
   - web/src/config/constants.ts: 요금 단가·환산 계수·임계치(출처 또는 TODO 주석)
   - web/src/app/globals.css: 디자인 토큰(`@theme`: bg-paper, text-ink, rounded-card, px-gutter, `card` 등)
-  - web/src/components/: 공통 요소(하단 탭바 + '예시 데이터' 표기, 직접 그린 SVG 아이콘)
+  - web/src/components/: 공통 요소(하단 탭바 + '예시 데이터' 표기, 직접 그린 SVG 아이콘, 우리 집 미니어처)
 - docs/screenshots/: `npm run shots` 결과(커밋한다)
 - pipeline/: Phase 2에서 만든다(Python)
 

@@ -25,6 +25,8 @@ export interface Household {
     nightMinFlowLph: number[];
     /** 최소 유량이 나온 시각(0~23시) */
     minFlowHour: number;
+    /** 가장 의심되는 점검 위치 */
+    roomId: RoomId;
   };
   /** 지난달들, 오래된 달부터 */
   pastMonths: PastMonth[];
@@ -38,4 +40,72 @@ export interface Complex {
   goalPines: number;
   currentPines: number;
   pinesThisWeek: number;
+}
+
+// ---- 평면(미니어처) ----
+// 좌표는 m. x = 왼쪽→오른쪽(폭), y = 뒤→앞(깊이, 앞쪽이 발코니), z = 위
+
+export type RoomId =
+  | "balcony"
+  | "room1"
+  | "living"
+  | "master"
+  | "room2"
+  | "kitchen"
+  | "bath"
+  | "entrance"
+  | "masterBath";
+
+export interface Room {
+  id: RoomId;
+  name: string;
+  x: number;
+  y: number;
+  w: number;
+  d: number;
+  floor: "wood" | "tile" | "stone";
+}
+
+/** 축에 나란한 벽 선분. h가 없으면 기본 높이 */
+export interface Wall {
+  x0: number;
+  y0: number;
+  x1: number;
+  y1: number;
+  h?: number;
+}
+
+export type FurnitureKind =
+  | "sofa"
+  | "bed"
+  | "bedding"
+  | "blanket"
+  | "table"
+  | "counter"
+  | "fridge"
+  | "toilet"
+  | "sink"
+  | "tub"
+  | "cabinet"
+  | "rug"
+  | "pot";
+
+/** 가구는 단순한 상자. z가 있으면 그 높이에 얹는다 */
+export interface Furniture {
+  kind: FurnitureKind;
+  x: number;
+  y: number;
+  w: number;
+  d: number;
+  h: number;
+  z?: number;
+}
+
+export interface FloorPlan {
+  name: string;
+  rooms: Room[];
+  walls: Wall[];
+  furniture: Furniture[];
+  /** 화분 위치(식물은 화분 위에 그린다) */
+  plant: { x: number; y: number };
 }
